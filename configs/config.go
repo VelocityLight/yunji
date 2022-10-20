@@ -13,6 +13,11 @@ type ConfigYaml struct {
 		CharSet  string `default:"utf8"`
 		TimeZone string `default:"Asia%2FShanghai"`
 	}
+
+	Feishu struct {
+		AppId     string `required:"false"`
+		AppSecret string `required:"false"`
+	}
 }
 
 var Config = &ConfigYaml{}
