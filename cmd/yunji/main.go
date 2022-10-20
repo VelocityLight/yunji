@@ -1,9 +1,13 @@
 package main
 
 import (
+	"yunji/api"
 	"yunji/internal/app/data_fetcher"
 )
 
 func main() {
-	data_fetcher.FetchData()
+	go data_fetcher.FetchData()
+
+	router := api.Routers()
+	router.Run(":8080")
 }
