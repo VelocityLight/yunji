@@ -18,3 +18,5 @@ clean:
 run: clean build
 	./${GO_BINARY}
 
+fmt:
+	goimports -l -w -local "github.com/VelocityLight/yunji"  .
