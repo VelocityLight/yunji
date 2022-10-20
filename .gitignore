@@ -15,3 +15,7 @@
 # vendor/
 
 config.yaml
+logs.txt
+
+bin/
+

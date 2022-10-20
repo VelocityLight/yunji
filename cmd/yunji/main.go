@@ -1,7 +1,13 @@
 package main
 
-import "fmt"
+import (
+	"yunji/api"
+	"yunji/internal/app/data_fetcher"
+)
 
 func main() {
-	fmt.Printf("Hello World!")
+	go data_fetcher.FetchData()
+
+	router := api.Routers()
+	router.Run(":8080")
 }
