@@ -1,7 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"yunji/internal/app/data_fetcher"
+)
 
 func main() {
-	fmt.Printf("Hello World!")
+	data_fetcher.FetchData()
 }
