@@ -1,11 +1,13 @@
 package api
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 )
 
 // Create gin-routers
-func Routers() (router *gin.Engine) {
+func NewGinRouter() (router *gin.Engine) {
 	router = gin.Default()
 
 	// Error
@@ -14,8 +16,9 @@ func Routers() (router *gin.Engine) {
 	// Cors
 	routeCors(router)
 
-	// Real REST-API registry
-	routeRestAPI(router)
+	router.GET("/ping", func(c *gin.Context) {
+		c.String(http.StatusOK, "pong")
+	})
 
 	return router
 }
@@ -26,9 +29,4 @@ func routeError(router *gin.Engine) {
 
 func routeCors(router *gin.Engine) {
 	router.Use(Cors())
-}
-
-// REST-API Function
-func routeRestAPI(router *gin.Engine) {
-
 }
