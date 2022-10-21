@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Column } from '@ant-design/plots';
 
 
 
-const PileBarChart = (data, xfiled_key, yfiled_key, serie_key) => {
+const PileBarChart = ({ data, xfiled_key, yfiled_key, serie_key }) => {
   const config = {
     data,
     isStack: true,

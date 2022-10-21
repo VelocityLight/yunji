@@ -4,8 +4,9 @@ import {
 } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom'
 
-const { Header, Sider, Content } = Layout;
+const { Sider, Content } = Layout;
 
 const MyLayout = (props) => {
   const { children } = props;
@@ -19,24 +20,15 @@ const MyLayout = (props) => {
           theme="dark"
           mode="inline"
           defaultSelectedKeys={['1']}
-          items={[
-            {
-              key: '1',
-              icon: <BarChartOutlined />,
-              label: 'Realtime',
-            },
-            {
-              key: '2',
-              icon: <TeamOutlined />,
-              label: 'Distribution',
-            },
-            // {
-            //     key: '3',
-            //     icon: <UploadOutlined />,
-            //     label: 'nav 3',
-            // },
-          ]}
-        />
+
+        >
+          <Menu.Item key="realtime">
+            <BarChartOutlined /><Link to={"/realtime"}>Realtime</Link>
+          </Menu.Item>
+          <Menu.Item key="team">
+            <TeamOutlined /><Link to={"/team"}>Team</Link>
+          </Menu.Item>
+        </Menu>
       </Sider>
       <Layout className="site-layout">
         <Content

@@ -1,4 +1,4 @@
-import './App.less'
+import './App.css';
 import MyRoutes from './routes'
 
 function App() {
@@ -9,4 +9,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
