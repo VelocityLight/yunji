@@ -23,10 +23,10 @@ const MyLayout = (props) => {
 
         >
           <Menu.Item key="realtime">
-            <BarChartOutlined /><Link to={"/realtime"}>Realtime</Link>
+            <BarChartOutlined /><Link to={"/home/realtime"}>Realtime</Link>
           </Menu.Item>
           <Menu.Item key="team">
-            <TeamOutlined /><Link to={"/team"}>Team</Link>
+            <TeamOutlined /><Link to={"/home/team"}>Team</Link>
           </Menu.Item>
         </Menu>
       </Sider>

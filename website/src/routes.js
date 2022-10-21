@@ -8,8 +8,8 @@ const MyRoutes = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<RealtimePage />} />
-        <Route path="/realtime" element={<RealtimePage />} />
-        <Route path="/team" element={<TeamPage />} />
+        <Route path="/home/realtime" element={<RealtimePage />} />
+        <Route path="/home/team" element={<TeamPage />} />
       </Routes>
     </BrowserRouter>
   );
