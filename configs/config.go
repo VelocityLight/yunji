@@ -4,20 +4,17 @@ import "github.com/jinzhu/configor"
 
 // Database configuration
 type ConfigYaml struct {
-	TiDB struct {
-		UserName string `default:"root"`
-		PassWord string `required:"true"`
-		Host     string `required:"true"`
-		Port     string `default:"3306"`
-		DataBase string `required:"true"`
-		CharSet  string `default:"utf8"`
-		TimeZone string `default:"Asia%2FShanghai"`
-	}
-
 	Feishu struct {
 		AppId     string `required:"false"`
 		AppSecret string `required:"false"`
 	}
+
+	// secret config
+	Secret
+}
+
+type Secret struct {
+	DSN string `yaml:"-"`
 }
 
 var Config = &ConfigYaml{}
