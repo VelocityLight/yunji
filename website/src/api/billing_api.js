@@ -11,13 +11,13 @@ export async function fetchBillingByTagAndService({ tags = [], service }) {
   }
 
   var serviceQuery = ""
-  if (service) {
-    serviceQuery = service
+  if (service && service.length > 0) {
+    serviceQuery = "service=" + service
   }
 
-  var queryString = ""
-  if (tagQuery.length > 0 || serviceQuery.length > 0) {
-    queryString = [tagQuery, serviceQuery].join("&")
+  var queryString = tagQuery
+  if (serviceQuery.length > 0) {
+    queryString = (queryString.length > 0 ? (queryString + "&") : "") + serviceQuery
   }
 
   console.log(

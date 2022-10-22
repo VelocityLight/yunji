@@ -1,5 +1,7 @@
 package common
 
+import "time"
+
 type RealtimeEvent struct {
 	EventID string `json:"event_id" db:"event_id"`
 	// Who
@@ -12,7 +14,7 @@ type RealtimeEvent struct {
 	ResourceID    string `json:"resource_id" db:"resource_id"`
 
 	// When
-	CreatedTime string `json:"created_time" db:"created_time"`
+	CreatedTime time.Time `json:"created_time" db:"created_time"`
 	// How
 	UsageType string `json:"usage_type" db:"usage_type"`
 	Operation string `json:"operation" db:"operation"`

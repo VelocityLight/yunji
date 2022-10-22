@@ -2,13 +2,14 @@ package pkg
 
 type AWSResourceType string
 
-const AWSEC2 = AWSResourceType("AWS_EC2")
-const AWSEKS = AWSResourceType("AWS_EKS")
-const AWSS3 = AWSResourceType("AWS_S3")
-const AWSECR = AWSResourceType("AWS_ECR")
-const AWSELB = AWSResourceType("AWS_ELB")
+const AWSEC2 = AWSResourceType("AmazonEC2")
+const AWSEKS = AWSResourceType("AmazonEKS")
+const AWSS3 = AWSResourceType("AmazonS3")
+const AWSVPC = AWSResourceType("AmazonVPC")
+const AWSELB = AWSResourceType("AWSELB")
+const AWSRoute53 = AWSResourceType("AmazonRoute53")
 
-var AWSResourceTypes = []AWSResourceType{AWSEC2, AWSEKS, AWSS3, AWSECR, AWSELB}
+var AWSResourceTypes = []AWSResourceType{AWSEC2, AWSEKS, AWSS3, AWSVPC, AWSRoute53, AWSELB}
 
 type ResourceOperationType string
 

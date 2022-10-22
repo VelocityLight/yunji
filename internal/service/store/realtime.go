@@ -2,6 +2,7 @@ package store
 
 import (
 	"context"
+	"fmt"
 	"yunji/common"
 	"yunji/utils/sql"
 )
@@ -27,6 +28,15 @@ func (s *RealTimeService) List(ctx context.Context, opts common.QueryRealtimeEve
 
 func (s *RealTimeService) GetServices() {}
 
-func (s *RealTimeService) Create(ctx context.Context) error {
-	return nil
+func (s *RealTimeService) Create(event common.RealtimeEvent) error {
+	insertString := fmt.Sprintf(`
+    INSERT INTO realtime_event (event_id, account_id, product_code, product_name,
+        product_region, resource_id, created_time, usage_type, operation, used_by)
+    VALUES ('%s', '%s', '%s', '%s', '%s','%s','%s','%s','%s','%s');
+    `, event.EventID, event.AccountID, event.ProductCode, event.ProductName,
+		event.ProductRegion, event.ResourceID, event.CreatedTime.Format("2006-01-02 15:04:05"),
+		event.UsageType, event.Operation,
+		event.UsedByTag)
+	_, err := s.db.Exec(insertString)
+	return err
 }

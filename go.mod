@@ -35,6 +35,7 @@ require (
 )
 
 require (
+	github.com/doug-martin/goqu/v9 v9.18.0
 	github.com/gin-contrib/static v0.0.1
 	github.com/gin-gonic/gin v1.8.1
 	github.com/google/uuid v1.3.0

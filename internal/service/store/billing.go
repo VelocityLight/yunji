@@ -3,7 +3,12 @@ package store
 import (
 	"context"
 	"fmt"
+
+	"github.com/doug-martin/goqu/v9"
+	"github.com/doug-martin/goqu/v9/exp"
+
 	"yunji/common"
+	"yunji/utils/log"
 	"yunji/utils/sql"
 )
 
@@ -47,14 +52,28 @@ func (s *BillingService) GetCostByTeam(ctx context.Context) ([]common.GetCostByT
 
 func (s *BillingService) Select1000ByProductCode(ctx context.Context, code string) ([]common.DetailBilling, error) {
 	var res []common.DetailBilling
-	queryString := fmt.Sprintf("select * from dev_billing where item_line_product_code = %s ORDER BY RAND() limit 1000", code)
+	queryString := fmt.Sprintf(`
+    select line_item_usage_account_id, line_item_product_code,
+    product_product_name,product_region_code, line_item_resource_id,line_item_usage_type, line_item_operation,
+    resource_tags_user_usedby
+    from dev_billing where line_item_product_code = '%s' limit 0, 1000`, code)
 	err := s.db.SelectContext(ctx, &res, queryString)
 	return res, err
 }
 
-func (s *BillingService) Select1000(ctx context.Context) ([]common.DetailBilling, error) {
+func (s *BillingService) Select1000ForRealtime(ctx context.Context) ([]common.DetailBilling, error) {
 	var res []common.DetailBilling
-	queryString := fmt.Sprintf("select * from dev_billing  ORDER BY RAND() limit 1000")
+	queryString := fmt.Sprintf(`
+    select line_item_usage_account_id, line_item_product_code,
+    product_product_name,product_region_code, line_item_resource_id,line_item_usage_type, line_item_operation,
+    resource_tags_user_usedby
+    from dev_billing
+ where line_item_product_code  in ('AmazonEKS','AWSELB','AmazonEC2','AmazonRoute53','AmazonS3','AmazonVPC')
+    group by line_item_usage_account_id, line_item_product_code,
+    product_product_name,product_region_code, line_item_resource_id,line_item_usage_type, line_item_operation,
+    resource_tags_user_usedby
+limit 0, 1000
+`)
 	err := s.db.SelectContext(ctx, &res, queryString)
 	return res, err
 }
@@ -73,6 +92,28 @@ func (s *BillingService) GetTags(ctx context.Context) ([]common.Tag, error) {
 	return res, err
 }
 
-func (s *BillingService) GetServices() {}
+func (s *BillingService) GetTrends(ctx context.Context, opts common.GetTrendOpts) (common.GetTrendResponse, error) {
+	var res common.GetTrendResponse
+	where := []exp.Expression{}
+	if len(opts.Tags) > 0 {
+		where = append(where, goqu.I("dev_billing.resource_tags_user_component").In(opts.Tags))
+	}
+
+	if len(opts.Service) > 0 {
+		where = append(where, goqu.I("dev_billing.resource_tags_user_usedby").In(opts.Service))
+	}
+
+	b := sql.Builder.From(goqu.T("dev_billing")).Where(where...).Prepared(true)
+
+	query, args, _ := b.Select(
+		goqu.L("DATE_FORMAT(line_item_usage_start_date, '%Y%m%d') AS time"),
+		goqu.L("SUM(line_item_unblended_cost) AS cost"),
+		goqu.L("line_item_product_code AS service"),
+	).GroupBy(goqu.L("time, service")).ToSQL()
+
+	log.Log.Infof("where: %v, query: %s, args: %v", where, query, args)
+	err := s.db.SelectContext(ctx, &res.Body, query, args...)
+	return res, err
+}
 
 func (s *BillingService) Create() {}

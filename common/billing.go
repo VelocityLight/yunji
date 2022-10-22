@@ -1,5 +1,7 @@
 package common
 
+import "time"
+
 type Billing struct {
 	Product string  `json:"product" db:"line_item_product_code"`
 	Cost    float64 `json:"cost" db:"line_item_unblended_cost"`
@@ -21,7 +23,7 @@ type GetCostByTeamResponse struct {
 }
 
 type DetailBilling struct {
-	AccountID     string `json:"line_item_usave_account_id" db:"line_item_usave_account_id"`
+	AccountID     string `json:"line_item_usave_account_id" db:"line_item_usage_account_id"`
 	ProductCode   string `json:"product_code" db:"line_item_product_code"`
 	ProductName   string `json:"product_name" db:"product_product_name"`
 	ProductRegion string `json:"product_region" db:"product_region_code"`
@@ -32,4 +34,22 @@ type DetailBilling struct {
 
 	// Other meta
 	UsedByTag string `json:"used_by" db:"resource_tags_user_usedby"`
+}
+
+type GetTrendResponse struct {
+	Message string  `json:"message,omitempty"`
+	Body    []Trend `json:"body"`
+}
+
+type Trend struct {
+	Time    string  `json:"time" db:"time"`
+	Cost    float64 `json:"cost" db:"cost"`
+	Service string  `json:"service" db:"service"`
+}
+
+type GetTrendOpts struct {
+	Tags               []string
+	Service            []string
+	Duration           *time.Time
+	StartedAt, EndedAt *time.Time
 }
