@@ -10,8 +10,7 @@ type HTTPHandler struct {
 	Gin *gin.Engine
 }
 
-func NewHTTPHandler() *HTTPHandler {
-	g := NewGinRouter()
+func NewHTTPHandler(g *gin.Engine) *HTTPHandler {
 	h := &HTTPHandler{
 		Gin: g,
 	}

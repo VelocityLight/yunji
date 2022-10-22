@@ -8,6 +8,7 @@ import (
 func main() {
 	go data_fetcher.FetchData()
 
-	router := api.Routers()
+	router := api.NewGinRouter()
+	router = api.RouteWebsite(router, "website/build/")
 	router.Run(":8080")
 }

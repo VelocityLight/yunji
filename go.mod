@@ -31,6 +31,7 @@ require (
 )
 
 require (
+	github.com/gin-contrib/static v0.0.1
 	github.com/gin-gonic/gin v1.8.1
 	github.com/google/uuid v1.3.0
 	github.com/jinzhu/configor v1.2.1
