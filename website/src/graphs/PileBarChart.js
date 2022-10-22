@@ -1,9 +1,24 @@
 import React from 'react';
 import { Column } from '@ant-design/plots';
-
-
+import { each, groupBy } from '@antv/util';
 
 const PileBarChart = ({ data, xfiled_key, yfiled_key, serie_key }) => {
+  const annotations = [];
+  each(groupBy(data, xfiled_key), (data, k) => {
+    const value = data.reduce((a, b) => a + b.value, 0);
+    annotations.push({
+      type: 'text',
+      position: [k, value],
+      content: `${value}`,
+      style: {
+        textAlign: 'center',
+        fontSize: 14,
+        fill: 'rgba(0,0,0,0.85)',
+      },
+      offsetY: -10,
+    });
+  });
+
   const config = {
     data,
     isStack: true,
@@ -29,6 +44,7 @@ const PileBarChart = ({ data, xfiled_key, yfiled_key, serie_key }) => {
         };
       },
     },
+    annotations,
   };
 
   return <Column {...config} />;
