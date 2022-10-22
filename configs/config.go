@@ -1,25 +1,38 @@
 package configs
 
-import "github.com/jinzhu/configor"
+import (
+	"fmt"
+	"io/ioutil"
+
+	"gopkg.in/yaml.v3"
+)
 
 // Database configuration
 type ConfigYaml struct {
 	Feishu struct {
-		AppId     string `required:"false"`
-		AppSecret string `required:"false"`
-	}
+		AppId     string `yaml:"appId"`
+		AppSecret string `yaml:"appSecret"`
+	} `yaml:"feishu"`
 
 	// secret config
-	Secret
+	Secret `yaml:"secret"`
 }
 
 type Secret struct {
-	DSN string `yaml:"-"`
+	DSN string `yaml:"dsn"`
 }
 
 var Config = &ConfigYaml{}
 
 // Load config from file into 'Config' variable
-func LoadConfig(file string) {
-	configor.Load(Config, file)
+func LoadConfig(configPath string) {
+	content, err := ioutil.ReadFile(configPath)
+	if err != nil {
+		panic(fmt.Sprintf("read config file failed, err= %v", err))
+	}
+
+	if err := yaml.Unmarshal(content, Config); err != nil {
+		panic(fmt.Sprintf("parse config file failed, err= %v", err))
+	}
+	fmt.Print("dsn: ", Config.DSN)
 }

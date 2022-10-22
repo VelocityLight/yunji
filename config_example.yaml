@@ -2,15 +2,9 @@
 # Because some configurations involve security, they cannot be disclosed. You should create "config.yaml" under this project by yourself.
 # All configuration information keys is in /tirelease/commons/configs/config.go in struct of ConfigYaml
 # Config like this:
-tidb:
-  username: ***
-  password: ***
-  host: ***
-  port: "***"
-  database: ***
-  charset: ***
-  timezone: ***
+secret:
+  dsn: root:@tcp(127.0.0.1:3306)/test?multiStatements=true&readTimeout=6s&parseTime=true
 
 feishu:
-  appid: ***
-  appsecret: ***
+  appid: abcd
+  appsecret: aabbccdd
