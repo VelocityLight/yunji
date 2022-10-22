@@ -12,10 +12,4 @@ func NewTagService(db *sql.Database) *TagService {
 
 func (s *TagService) Update() {}
 
-func (s *TagService) Get() {}
-
-func (s *TagService) Delete() {}
-
 func (s *TagService) List() {}
-
-func (s *TagService) Create() {}

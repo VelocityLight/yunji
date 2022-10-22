@@ -33,6 +33,10 @@ func NewHTTPHandler(g *gin.Engine, config *configs.ConfigYaml) *HTTPHandler {
 		bills.GET("/", func(c *gin.Context) {
 			c.String(http.StatusOK, "hello bills")
 		})
+
+		bills.GET("/used-by-tags", h.GetUsedByTags)
+		bills.GET("/component-tags", h.GetTags)
+
 		bills.GET("/trend", func(c *gin.Context) {
 			c.JSON(http.StatusOK, gin.H{"data": Response{
 				Body: []TrendDTO{
