@@ -42,3 +42,7 @@ func NewHTTPHandler(g *gin.Engine, config *configs.ConfigYaml) *HTTPHandler {
 func (h *HTTPHandler) Shutdown() error {
 	return h.store.Shutdown()
 }
+
+func (h *HTTPHandler) GetStore() *store.Store {
+	return h.store
+}

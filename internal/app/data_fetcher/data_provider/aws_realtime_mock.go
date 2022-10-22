@@ -1,11 +1,17 @@
 package provider
 
 import (
+	"context"
+	"fmt"
 	"math/rand"
 	"time"
+	"yunji/common"
+	"yunji/configs"
 	"yunji/internal/pkg"
 
 	"github.com/google/uuid"
+
+	"yunji/internal/service/store"
 )
 
 type AWSRealtimeHackerConfig struct {
@@ -16,58 +22,83 @@ type AWSRealtimeHackerConfig struct {
 }
 
 var Config = &AWSRealtimeHackerConfig{
-	IsAttack:        true,
-	AttackResource:  pkg.AWSEC2,
-	AttackOperation: pkg.Create,
-	AttackSource:    "hacker_ip",
+	IsAttack:       false,
+	AttackResource: pkg.AWSS3,
 }
 
 type AWSRealtimeMockProvider struct {
 }
 
 func (provider AWSRealtimeMockProvider) FetchData() error {
+	store := store.NewStore(configs.Config)
 	if Config.IsAttack {
-		go MockHackerAttack()
+		go MockHackerAttack(store)
+	}
+
+	originDetails, err := store.Billing.Select1000ForRealtime(context.Background())
+	if err != nil {
+		return err
 	}
 
 	for {
+
 		// mock interval of operations
 		intervalSeed := rand.Intn(1500)
 		time.Sleep(time.Duration(intervalSeed) * time.Millisecond)
 
 		// mock distribution of operations
-		opSeed := rand.Intn(10)
-		operation := pkg.Read
-		if opSeed == 9 {
-			operation = pkg.Delete
-		} else if opSeed >= 7 {
-			operation = pkg.Create
-		} else if opSeed >= 5 {
-			operation = pkg.Update
+		opSeed := rand.Intn(1000)
+		detail := originDetails[opSeed]
+
+		realtimeEvent := common.RealtimeEvent{
+			EventID:       uuid.New().String(),
+			AccountID:     detail.AccountID,
+			ProductCode:   detail.ProductCode,
+			ProductName:   detail.ProductName,
+			ProductRegion: detail.ProductRegion,
+			ResourceID:    fmt.Sprintf("%s-%s", detail.ResourceID, uuid.New().String()[:5]),
+			CreatedTime:   time.Now(),
+			UsageType:     detail.UsageType,
+			Operation:     detail.Operation,
+			UsedByTag:     detail.UsedByTag,
 		}
 
-		resourceSeed := rand.Intn(5)
-		resourceType := pkg.AWSResourceTypes[resourceSeed]
-
-		resourceID := uuid.New()
-
-		pkg.ProviderLogger.Printf("Someone %s resource %s of ID: %s at %s; \n", operation, resourceType, resourceID, time.Now().String())
+		pkg.ProviderLogger.Printf("Accessing resource detail: %v; \n", realtimeEvent)
+		store.RealTime.Create(realtimeEvent)
 	}
 }
 
-func MockHackerAttack() {
+func MockHackerAttack(store *store.Store) {
+	originDetails, err := store.Billing.Select1000ByProductCode(context.Background(), string(Config.AttackResource))
+	if err != nil {
+		fmt.Print(err)
+	}
+
 	for {
+
 		// mock interval of operations
 		intervalSeed := rand.Intn(300)
 		time.Sleep(time.Duration(intervalSeed) * time.Millisecond)
 
 		// mock distribution of operations
-		operation := Config.AttackOperation
+		count := len(originDetails)
+		opSeed := rand.Intn(count)
+		detail := originDetails[opSeed]
 
-		resourceType := Config.AttackResource
+		realtimeEvent := common.RealtimeEvent{
+			EventID:       uuid.New().String(),
+			AccountID:     detail.AccountID,
+			ProductCode:   detail.ProductCode,
+			ProductName:   detail.ProductName,
+			ProductRegion: detail.ProductRegion,
+			ResourceID:    fmt.Sprintf("%s-%s", detail.ResourceID, uuid.New().String()[:5]),
+			CreatedTime:   time.Now(),
+			UsageType:     detail.UsageType,
+			Operation:     detail.Operation,
+			UsedByTag:     detail.UsedByTag,
+		}
 
-		resourceID := uuid.New()
-
-		pkg.ProviderLogger.Printf("%s %s resource %s of ID: %s at %s; \n", Config.AttackSource, operation, resourceType, resourceID, time.Now().String())
+		pkg.ProviderLogger.Printf("!!!Hacker accessing resource detail: %v; \n", realtimeEvent)
+		store.RealTime.Create(realtimeEvent)
 	}
 }

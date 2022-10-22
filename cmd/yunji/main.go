@@ -22,8 +22,6 @@ func main() {
 	flag.Parse()
 	configs.LoadConfig(*config)
 
-	go data_fetcher.FetchData()
-
 	ginRouter := api.NewGinRouter()
 	ginRouter = api.RouteWebsite(ginRouter, "website/build/")
 
@@ -36,6 +34,8 @@ func main() {
 		err := h.Gin.Run(":8080")
 		log.Log.Infof("shutting down the server, err=%v", err)
 	}()
+
+	go data_fetcher.FetchData()
 
 	if err := waitShutdown(h); err != nil {
 		log.Log.Errorf(err, "shutdown server error")
