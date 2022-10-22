@@ -1,6 +1,9 @@
 package store
 
-import "yunji/utils/sql"
+import (
+	"yunji/configs"
+	"yunji/utils/sql"
+)
 
 func NewDBClient(dsn string) *sql.Database {
 	return sql.MustConnect(dsn)
@@ -8,6 +11,16 @@ func NewDBClient(dsn string) *sql.Database {
 
 type Store struct {
 	DB *sql.Database
+
+	Billing *BillingService
+}
+
+func NewStore(config *configs.ConfigYaml) *Store {
+	return &Store{
+		DB: NewDBClient(config.Secret.DSN),
+
+		Billing: NewBillingService(NewDBClient(config.Secret.DSN)),
+	}
 }
 
 func (s *Store) Shutdown() error {

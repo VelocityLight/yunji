@@ -14,7 +14,7 @@ clean:
 	@echo "clear all temporary files and folders successful hahaha!"
 
 run: clean build
-	./${GO_BINARY}
+	./${GO_BINARY} --config ./config.yaml
 
 build.server:
 	go fmt ./... && \
