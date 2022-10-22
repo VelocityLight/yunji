@@ -1,40 +1,35 @@
 import * as React from "react";
 import { useEffect, useState } from 'react';
 import MyLayout from "../layout/Layout";
+
+import { useQuery, useQueryClient } from "react-query";
 import PieChart from "../graphs/PieChart";
+import { fetchTeamCosts } from "../api/team_api";
 
 const TeamPage = () => {
 
-  const [data, setData] = useState([
+  const query = useQuery(
+    ["team"],
+    () =>
+      fetchTeamCosts({}),
     {
-      type: '分类一',
-      value: 100,
-    },
-    {
-      type: '分类二',
-      value: 200,
-    },
-    {
-      type: '分类三',
-      value: 300,
-    },
-    {
-      type: '分类四',
-      value: 100,
-    },
-    {
-      type: '分类五',
-      value: 100,
-    },
-    {
-      type: '其他',
-      value: 200,
-    },
-  ]);
+      keepPreviousData: true,
+      staleTime: 5000,
+    }
+  );
+
+  if (query.isLoading) {
+    return <p>Loading...</p>;
+  }
+  if (query.error) {
+    return <p>Error: {query.error.message}</p>;
+  }
+
+  const pieData = query.data
 
   return (
     <MyLayout>
-      <PieChart data={data} type_key="type" value_key={"value"} />
+      <PieChart data={pieData} type_key="team" value_key={"cost"} />
     </MyLayout>
   );
 };
