@@ -1,6 +1,7 @@
 import {
   BarChartOutlined,
   TeamOutlined,
+  FireOutlined
 } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 import React, { useState } from 'react';
@@ -22,8 +23,11 @@ const MyLayout = (props) => {
           defaultSelectedKeys={['1']}
 
         >
+          <Menu.Item key="billing_trend">
+            <BarChartOutlined /><Link to={"/home/trend"}>Billing Trend</Link>
+          </Menu.Item>
           <Menu.Item key="realtime">
-            <BarChartOutlined /><Link to={"/home/realtime"}>Realtime</Link>
+            <FireOutlined /><Link to={"/home/realtime"}>Realtime</Link>
           </Menu.Item>
           <Menu.Item key="team">
             <TeamOutlined /><Link to={"/home/team"}>Team</Link>

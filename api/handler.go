@@ -30,8 +30,35 @@ func NewHTTPHandler(g *gin.Engine, config *configs.ConfigYaml) *HTTPHandler {
 		resources.GET("/", h.GetCostByTeam)
 
 		bills := v1.Group("/bills")
+		bills.GET("/", func(c *gin.Context) {
+			c.String(http.StatusOK, "hello bills")
+		})
+
 		bills.GET("/used-by-tags", h.GetUsedByTags)
 		bills.GET("/component-tags", h.GetTags)
+
+		bills.GET("/trend", func(c *gin.Context) {
+			c.JSON(http.StatusOK, gin.H{"data": Response{
+				Body: []TrendDTO{
+					{
+						Time: "2021-10",
+						Cost: 1000,
+						Tag:  "A",
+					},
+					{
+						Time: "2022-11",
+						Cost: 2000,
+						Tag:  "A",
+					},
+					{
+						Time: "2022-12",
+						Cost: 1000,
+						Tag:  "B",
+					},
+				},
+			}})
+		})
+
 	}
 
 	return h
@@ -39,4 +66,15 @@ func NewHTTPHandler(g *gin.Engine, config *configs.ConfigYaml) *HTTPHandler {
 
 func (h *HTTPHandler) Shutdown() error {
 	return h.store.Shutdown()
+}
+
+type Response struct {
+	Message string      `json:"message,omitempty"`
+	Body    interface{} `json:"body"`
+}
+
+type TrendDTO struct {
+	Time string `json:"time,omitempty"`
+	Cost int    `json:"cost,omitempty"`
+	Tag  string `json:"tag,omitempty"`
 }
