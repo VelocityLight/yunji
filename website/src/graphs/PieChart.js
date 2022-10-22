@@ -32,7 +32,7 @@ const PieChart = ({ data, type_key, value_key }) => {
           attrs: {
             x: 10,
             y: 8,
-            text: `${data.type}`,
+            text: `${data[type_key]}`,
             fill: mappingData.color,
           },
         });
@@ -41,7 +41,7 @@ const PieChart = ({ data, type_key, value_key }) => {
           attrs: {
             x: 0,
             y: 25,
-            text: `${data.value}个 ${data.percent * 100}%`,
+            text: `${data[value_key]}$ ${Math.floor(data.percent * 100)}%`,
             fill: 'rgba(0, 0, 0, 0.65)',
             fontWeight: 700,
           },
