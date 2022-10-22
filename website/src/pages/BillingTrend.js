@@ -7,8 +7,7 @@ import { fetchBillingByTagAndService } from "../api/billing_api"
 
 const BillingTrendPage = () => {
 
-  const [data, setData] = useState([]);
-
+  // const [inputData, setInputData] = useState([]);
 
   const query = useQuery(
     ["billingTrend", "tags", "service"],
@@ -27,12 +26,12 @@ const BillingTrendPage = () => {
     return <p>Error: {query.error.message}</p>;
   }
 
-  console.log(data)
-  setData(query.data.body)
+  console.log(query.data)
+  const inputData = query.data.body
 
   return (
     <MyLayout>
-      <PileBarChart data={data} xfiled_key={"time"} yfiled_key={"cost"} serie_key="tag" />
+      <PileBarChart data={inputData} xfiled_key={"time"} yfiled_key={"cost"} serie_key="tag" />
     </MyLayout>
   );
 };

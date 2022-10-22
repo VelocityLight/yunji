@@ -22,13 +22,13 @@ export async function fetchBillingByTagAndService({ tags = [], service }) {
 
   console.log(
     "fetchBiling",
-    url(`billing?${queryString}`)
+    url(`bills/trend?${queryString}`)
   );
 
-  return fetch(url(`billing?${queryString}`))
+  return fetch(url(`bills/trend?${queryString}`))
     .then(async (res) => {
       const data = await res.json();
-      return data;
+      return data.data;
     })
   // .catch((e) => {
   //   return e

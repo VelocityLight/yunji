@@ -10,5 +10,6 @@ func main() {
 
 	router := api.NewGinRouter()
 	router = api.RouteWebsite(router, "website/build/")
+	api.NewHTTPHandler(router)
 	router.Run(":8080")
 }

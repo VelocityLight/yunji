@@ -30,7 +30,40 @@ func NewHTTPHandler(g *gin.Engine) *HTTPHandler {
 		bills.GET("/", func(c *gin.Context) {
 			c.String(http.StatusOK, "hello bills")
 		})
+		bills.GET("/trend", func(c *gin.Context) {
+			c.JSON(http.StatusOK, gin.H{"data": Response{
+				Body: []TrendDTO{
+					{
+						Time: "2021-10",
+						Cost: 1000,
+						Tag:  "A",
+					},
+					{
+						Time: "2022-11",
+						Cost: 2000,
+						Tag:  "A",
+					},
+					{
+						Time: "2022-12",
+						Cost: 1000,
+						Tag:  "B",
+					},
+				},
+			}})
+		})
+
 	}
 
 	return h
+}
+
+type Response struct {
+	Message string      `json:"message,omitempty"`
+	Body    interface{} `json:"body"`
+}
+
+type TrendDTO struct {
+	Time string `json:"time,omitempty"`
+	Cost int    `json:"cost,omitempty"`
+	Tag  string `json:"tag,omitempty"`
 }
