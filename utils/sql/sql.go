@@ -5,7 +5,13 @@ import (
 	"database/sql"
 	"time"
 
+	"github.com/doug-martin/goqu/v9"
+
 	"github.com/jmoiron/sqlx"
+)
+
+var (
+	Builder = goqu.Dialect("mysql")
 )
 
 type Database struct {

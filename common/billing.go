@@ -1,5 +1,7 @@
 package common
 
+import "time"
+
 type Billing struct {
 	Product string  `json:"product" db:"line_item_product_code"`
 	Cost    float64 `json:"cost" db:"line_item_unblended_cost"`
@@ -18,4 +20,22 @@ type QueryBillingOpts struct {
 type GetCostByTeamResponse struct {
 	Team string  `json:"team" db:"team"`
 	Cost float64 `json:"cost" db:"cost"`
+}
+
+type GetTrendResponse struct {
+	Message string  `json:"message,omitempty"`
+	Body    []Trend `json:"body"`
+}
+
+type Trend struct {
+	Time    string  `json:"time" db:"time"`
+	Cost    float64 `json:"cost" db:"cost"`
+	Service string  `json:"service" db:"service"`
+}
+
+type GetTrendOpts struct {
+	Tags               []string
+	Service            []string
+	Duration           *time.Time
+	StartedAt, EndedAt *time.Time
 }
