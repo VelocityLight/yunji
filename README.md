@@ -7,10 +7,10 @@ Design: [https://gist.github.com/VelocityLight/ccb4c50e569b1ee733f23a2bb97e8439]
 口号：省点钱养你！
 
 团队成员：
-- 叶鋆郴 [@VelocityLight](https://github.com/VelocityLight) : 工程效率研发工程师（队长）
-- 李煜超 [@MimeLyc](https://github.com/MimeLyc) : 工程效率研发工程师 （前端 + 后端）
-- 莫飞虎 [@Codingpoeta](https://github.com/Codingpoeta) : 工程效率研发工程师 (后端)
-- 张月 [@heipark](https://github.com/heipark) : 版本发布经理 (业务需求 & 设计)
+- 叶鋆郴 [@VelocityLight](https://github.com/VelocityLight) : 工程效率研发工程师（队长 + 技术设计）
+- 李煜超 [@MimeLyc](https://github.com/MimeLyc) : 工程效率研发工程师 （前端 + 数据分析）
+- 莫飞虎 [@Codingpoeta](https://github.com/Codingpoeta) : 工程效率研发工程师 (后端 + 前端)
+- 张月 [@heipark](https://github.com/heipark) : 版本发布经理 (业务需求 & 场景设计)
 
 # 背景&动机
 云技术技术浪潮下，企业一方面享受云上完善的基础设施的福利，一方面苦恼于云上资源与成本的管理。
