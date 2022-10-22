@@ -2,6 +2,7 @@ package store
 
 import (
 	"context"
+	"fmt"
 	"yunji/common"
 	"yunji/utils/sql"
 )
@@ -41,6 +42,20 @@ func (s *BillingService) GetCostByTeam(ctx context.Context) ([]common.GetCostByT
 				where line_item_unblended_cost > 0 and line_item_product_code !=  'ComputeSavingsPlans'
 				group by  resource_tags_user_usedby  order by cost
 			) t ) t2 group by team`)
+	return res, err
+}
+
+func (s *BillingService) Select1000ByProductCode(ctx context.Context, code string) ([]common.DetailBilling, error) {
+	var res []common.DetailBilling
+	queryString := fmt.Sprintf("select * from dev_billing where item_line_product_code = %s ORDER BY RAND() limit 1000", code)
+	err := s.db.SelectContext(ctx, &res, queryString)
+	return res, err
+}
+
+func (s *BillingService) Select1000(ctx context.Context) ([]common.DetailBilling, error) {
+	var res []common.DetailBilling
+	queryString := fmt.Sprintf("select * from dev_billing  ORDER BY RAND() limit 1000")
+	err := s.db.SelectContext(ctx, &res, queryString)
 	return res, err
 }
 
