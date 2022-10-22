@@ -30,9 +30,8 @@ func NewHTTPHandler(g *gin.Engine, config *configs.ConfigYaml) *HTTPHandler {
 		resources.GET("/", h.GetCostByTeam)
 
 		bills := v1.Group("/bills")
-		bills.GET("/", func(c *gin.Context) {
-			c.String(http.StatusOK, "hello bills")
-		})
+		bills.GET("/used-by-tags", h.GetUsedByTags)
+		bills.GET("/component-tags", h.GetTags)
 	}
 
 	return h

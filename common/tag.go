@@ -1,11 +1,9 @@
 package common
 
 type Tag struct {
-	ID   int    `json:"id" db:"id"`
-	Name string `json:"name" db:"name"`
+	Name string `json:"name" db:"resource_tags_user_component"`
 }
 
 type UsedByTag struct {
-	ID   int    `json:"id" db:"id"`
-	Name string `json:"name" db:"name"`
+	Name string `json:"name" db:"resource_tags_user_usedby"`
 }

@@ -44,4 +44,20 @@ func (s *BillingService) GetCostByTeam(ctx context.Context) ([]common.GetCostByT
 	return res, err
 }
 
+func (s *BillingService) GetUsedByTags(ctx context.Context) ([]common.UsedByTag, error) {
+	var res []common.UsedByTag
+	err := s.db.SelectContext(ctx, &res, `
+		select resource_tags_user_usedby from dev_billing group by resource_tags_user_usedby`)
+	return res, err
+}
+
+func (s *BillingService) GetTags(ctx context.Context) ([]common.Tag, error) {
+	var res []common.Tag
+	err := s.db.SelectContext(ctx, &res, `
+		select resource_tags_user_component from dev_billing group by resource_tags_user_component`)
+	return res, err
+}
+
+func (s *BillingService) GetServices() {}
+
 func (s *BillingService) Create() {}
