@@ -34,6 +34,9 @@ func NewHTTPHandler(g *gin.Engine, config *configs.ConfigYaml) *HTTPHandler {
 		bills.GET("/used-by-tags", h.GetUsedByTags)
 		bills.GET("/component-tags", h.GetTags)
 		bills.GET("/trend", h.GetTrending)
+
+		realtime := v1.Group("/hacker")
+		realtime.POST("/trigger", h.PostHackerTrigger)
 	}
 
 	return h
