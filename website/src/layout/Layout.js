@@ -26,12 +26,13 @@ const MyLayout = (props) => {
           <Menu.Item key="billing_trend">
             <BarChartOutlined /><Link to={"/home/trend"}>Billing Trend</Link>
           </Menu.Item>
-          <Menu.Item key="realtime">
-            <FireOutlined /><Link to={"/home/realtime"}>Realtime</Link>
-          </Menu.Item>
           <Menu.Item key="team">
             <TeamOutlined /><Link to={"/home/team"}>Team</Link>
           </Menu.Item>
+          <Menu.Item key="realtime">
+            <FireOutlined /><Link to={"/home/realtime"}>Realtime</Link>
+          </Menu.Item>
+
         </Menu>
       </Sider>
       <Layout className="site-layout">
