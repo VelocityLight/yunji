@@ -116,7 +116,7 @@ func (s *BillingService) GetTrends(ctx context.Context, opts common.GetTrendOpts
 		goqu.L("DATE_FORMAT(line_item_usage_start_date, '%Y%m%d') AS time"),
 		goqu.L("SUM(line_item_unblended_cost) AS cost"),
 		goqu.L("line_item_product_code AS service"),
-	).GroupBy(goqu.L("time, service")).ToSQL()
+	).GroupBy(goqu.L("time, service")).Order(goqu.I("time").Asc()).ToSQL()
 
 	log.Log.Infof("where: %v, query: %s, args: %v", where, query, args)
 	err := s.db.SelectContext(ctx, &res.Body, query, args...)
