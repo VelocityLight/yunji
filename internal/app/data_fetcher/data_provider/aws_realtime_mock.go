@@ -62,7 +62,10 @@ func (provider AWSRealtimeMockProvider) FetchData() error {
 		}
 
 		pkg.ProviderLogger.Printf("Accessing resource detail: %v; \n", realtimeEvent)
-		store.RealTime.Create(realtimeEvent)
+		err := store.RealTime.Create(realtimeEvent)
+		if err != nil {
+			pkg.ErrorLogger.Fatal(err)
+		}
 	}
 }
 
@@ -111,6 +114,10 @@ func MockHackerAttack(store *store.Store) {
 		}
 
 		pkg.ProviderLogger.Printf("Accessing resource detail: %v; \n", realtimeEvent)
-		store.RealTime.Create(realtimeEvent)
+		err := store.RealTime.Create(realtimeEvent)
+
+		if err != nil {
+			pkg.ErrorLogger.Fatal(err)
+		}
 	}
 }
