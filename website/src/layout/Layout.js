@@ -24,7 +24,7 @@ const MyLayout = (props) => {
 
         >
           <Menu.Item key="billing_trend">
-            <BarChartOutlined /><Link to={"/home/trend"}>Billing Trend</Link>
+            <BarChartOutlined /><Link to={"/home/trend"}>Billing</Link>
           </Menu.Item>
           <Menu.Item key="team">
             <TeamOutlined /><Link to={"/home/team"}>Team</Link>

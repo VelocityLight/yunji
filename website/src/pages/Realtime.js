@@ -22,16 +22,8 @@ const RealtimePage = () => {
 
 
   if (inputData.length == 0) {
-    fetchRealtime({})
-      .then((resp) => {
-        var tmp = resp.body == undefined ? [] : resp.body
-        setInputData(tmp)
-      });
     return <p>Loading...</p>;
   }
-
-
-
 
   console.log(inputData)
 
