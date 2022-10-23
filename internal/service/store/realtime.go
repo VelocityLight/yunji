@@ -3,6 +3,7 @@ package store
 import (
 	"context"
 	"fmt"
+
 	"yunji/common"
 	"yunji/utils/sql"
 )
@@ -26,7 +27,18 @@ func (s *RealTimeService) List(ctx context.Context, opts common.QueryRealtimeEve
 	return events, nil
 }
 
-func (s *RealTimeService) GetServices() {}
+func (s *RealTimeService) GetRealTime(ctx context.Context) (common.GetRealTimeResponse, error) {
+	var res common.GetRealTimeResponse
+	err := s.db.SelectContext(ctx, &res.Body, `
+		SELECT 
+			DATE_FORMAT(created_time,'%Y%m%d-%H:%i') AS time,
+			count(created_time) AS cnt,
+			product_code AS service 
+		FROM realtime_event WHERE created_time > DATE_ADD(NOW(),INTERVAL 430 MINUTE)
+		GROUP BY time,service
+		ORDER BY time`)
+	return res, err
+}
 
 func (s *RealTimeService) Create(event common.RealtimeEvent) error {
 	insertString := fmt.Sprintf(`

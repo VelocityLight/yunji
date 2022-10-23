@@ -38,6 +38,7 @@ func NewHTTPHandler(g *gin.Engine, config *configs.ConfigYaml) *HTTPHandler {
 
 		realtime := v1.Group("/hacker")
 		realtime.POST("/trigger", h.PostHackerTrigger)
+		realtime.GET("/realtime", h.GetRealTime)
 	}
 
 	return h
