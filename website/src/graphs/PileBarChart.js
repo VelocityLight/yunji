@@ -17,7 +17,7 @@ const PileBarChart = ({ data = [], xfiled = "time", yfield = "cost", serie = "se
 
   const annotations = [];
   each(groupBy(data, xfiled), (data, k) => {
-    const value = data.reduce((a, b) => a + b['cost'], 0);
+    const value = data.reduce((a, b) => a + b[yfield], 0);
     annotations.push({
       type: 'text',
       position: [k, value],
@@ -35,7 +35,7 @@ const PileBarChart = ({ data = [], xfiled = "time", yfield = "cost", serie = "se
     data,
     isStack: true,
     xField: 'time',
-    yField: 'cost',
+    yField: yfield,
     seriesField: 'service',
     label: {
       // 可手动配置 label 数据标签位置
@@ -56,15 +56,15 @@ const PileBarChart = ({ data = [], xfiled = "time", yfield = "cost", serie = "se
         };
       },
     },
-    xAxis: {
-      label: {
-        autoRotate: false,
-      },
-    },
-    slider: {
-      start: 0,
-      end: 1,
-    },
+    // xAxis: {
+    //   label: {
+    //     autoRotate: false,
+    //   },
+    // },
+    // slider: {
+    //   start: 0,
+    //   end: 1,
+    // },
     annotations,
   };
   return <Column {...config} />;
