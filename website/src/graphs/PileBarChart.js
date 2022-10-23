@@ -5,39 +5,31 @@ import { useEffect, useState } from 'react';
 import { useQuery } from "react-query";
 import { fetchBillingByTagAndService } from "../api/billing_api"
 
-const PileBarChart = ({ tags, service }) => {
-  const [data, setData] = useState([]);
+const PileBarChart = ({ data = [], xfiled = "time", yfield = "cost", serie = "service" }) => {
+  if (yfield == "cost") {
+    data.map(
+      item => {
+        item.cost = Math.floor(item[yfield])
+        return item
+      }
+    )
+  }
 
-  useEffect(() => {
-    fetchBillingByTagAndService({ tags: tags, service: service }).then((resp) => setData(resp.body));
-  }, [tags, service]);
-
-  // const annotations = [];
-
-  // const query = useQuery(
-  //   ["billingTrend", tags, service],
-  //   () =>
-  //     fetchBillingByTagAndService({ tags: tags, service: service }).then,
-  //   {
-  //     keepPreviousData: true,
-  //     staleTime: 20000,
-  //   }
-  // );
-
-  // each(groupBy(query.body, 'time'), (data, k) => {
-  //   const value = data.reduce((a, b) => a + b.value, 0);
-  //   annotations.push({
-  //     type: 'text',
-  //     position: [k, value],
-  //     content: `${value}`,
-  //     style: {
-  //       textAlign: 'center',
-  //       fontSize: 14,
-  //       fill: 'rgba(0,0,0,0.85)',
-  //     },
-  //     offsetY: -10,
-  //   });
-  // });
+  const annotations = [];
+  each(groupBy(data, xfiled), (data, k) => {
+    const value = data.reduce((a, b) => a + b['cost'], 0);
+    annotations.push({
+      type: 'text',
+      position: [k, value],
+      content: `${value}`,
+      style: {
+        textAlign: 'center',
+        fontSize: 14,
+        fill: 'rgba(0,0,0,0.85)',
+      },
+      offsetY: -10,
+    });
+  });
 
   const config = {
     data,
@@ -64,18 +56,17 @@ const PileBarChart = ({ tags, service }) => {
         };
       },
     },
-    // annotations,
+    xAxis: {
+      label: {
+        autoRotate: false,
+      },
+    },
+    slider: {
+      start: 0,
+      end: 1,
+    },
+    annotations,
   };
-
-  // console.log(query.body)
-
-  // if (query.isLoading) {
-  //   return <p>Loading...</p>;
-  // }
-  // if (query.error) {
-  //   return <p>Error: {query.error.message}</p>;
-  // }
-
   return <Column {...config} />;
 };
 

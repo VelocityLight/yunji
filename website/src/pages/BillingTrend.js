@@ -8,6 +8,8 @@ import MultiSelector from "../components/MultiSelector"
 import Selector from "../components/SingleSelector"
 import { Divider, Tag } from 'antd';
 
+import { fetchBillingByTagAndService } from "../api/billing_api"
+
 export function getSelectorValues(tagResp) {
   return tagResp.map(tag => tag.name)
 }
@@ -15,6 +17,7 @@ export function getSelectorValues(tagResp) {
 const BillingTrendPage = () => {
   const [selectedTags, setSelectedTags] = useState([])
   const [selectedService, setSelectedService] = useState([])
+  const [inputData, setInputData] = useState([]);
   const onSelectTags = (values) => {
     setSelectedTags(values)
   }
@@ -23,32 +26,43 @@ const BillingTrendPage = () => {
   }
 
   const tagQuery = useQuery(
-    ["billingTrendTags"],
+    ["billingTrendTags", selectedTags],
     () => fetchTags(),
     {
       keepPreviousData: true,
-      staleTime: 5000,
+      staleTime: 50,
     }
+
   )
 
   const serviceQuery = useQuery(
-    ["billingTrendService"],
+    ["billingTrendService", selectedService],
     () => fetchServices(),
     {
       keepPreviousData: true,
-      staleTime: 5000,
+      staleTime: 50,
     }
+
   )
+
+
+  useEffect(() => {
+    fetchBillingByTagAndService({ tags: selectedTags, service: selectedService })
+      .then((resp) => setInputData(resp.body == undefined ? [] : resp.body));
+  }, [selectedTags, selectedService]);
+
 
   if (tagQuery.isLoading || serviceQuery.isLoading) {
     return <p>Loading...</p>;
   }
   if (tagQuery.error || serviceQuery.error) {
-    return <p>Error: {tagQuery.error.message}</p>;
+    return <p>Error: </p>;
   }
 
   const tagSelectors = getSelectorValues(tagQuery.data)
   const serviceSelectors = getSelectorValues(serviceQuery.data)
+  // setInputData(query.data.body == undefined ? [] : query.data.body)
+  // // const inputData = query.data.body == undefined ? [] : query.data.body
 
   return (
     <MyLayout>
@@ -59,7 +73,7 @@ const BillingTrendPage = () => {
         <MultiSelector key="services" items={serviceSelectors} onSelect={onSelectService} />
       </div>
       <div>
-        <PileBarChart tags={selectedTags} service={selectedService} />
+        <PileBarChart data={inputData} />
       </div>
     </MyLayout>
   );
