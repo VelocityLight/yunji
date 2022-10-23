@@ -27,3 +27,12 @@ func (h *HTTPHandler) PostHackerTrigger(c *gin.Context) {
 
 	c.JSON(http.StatusOK, opts)
 }
+
+func (h *HTTPHandler) GetRealTime(c *gin.Context) {
+	resp, err := h.store.RealTime.GetRealTime(c.Request.Context())
+	if err != nil {
+		c.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+	c.JSON(http.StatusOK, resp)
+}

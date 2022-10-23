@@ -28,3 +28,14 @@ type QueryRealtimeEventOpts struct {
 
 	Offset, Limit uint
 }
+
+type GetRealTimeResponse struct {
+	Message string          `json:"message,omitempty"`
+	Body    []RealTimeUnits `json:"body"`
+}
+
+type RealTimeUnits struct {
+	Time    string `json:"time"`
+	Cnt     int    `json:"cnt"`
+	Service string `json:"service"`
+}
