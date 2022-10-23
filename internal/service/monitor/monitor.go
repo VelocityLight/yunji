@@ -20,6 +20,7 @@ type Monitor struct {
 func NewMonitor(config *configs.ConfigYaml) *Monitor {
 	feishu.SetFeishuApp(config.Feishu.AppId, config.Feishu.AppSecret)
 
+	fmt.Print("init monitor\n")
 	return &Monitor{
 		Store:  store.NewStore(config),
 		Notify: &notify.FeishuNotification{},
@@ -39,6 +40,7 @@ func (m *Monitor) Inspect(_ context.Context) (err error) {
 			total int
 		})
 		var recentTime string
+		var subRecentTime string
 
 		for _, v := range res.Body {
 			serviceCntPer10Sec[v.Service] = struct {
@@ -56,16 +58,23 @@ func (m *Monitor) Inspect(_ context.Context) (err error) {
 
 			if recentTime == "" {
 				recentTime = v.Time
+				subRecentTime = recentTime
 			} else if v.Time > recentTime {
+				subRecentTime = recentTime
 				recentTime = v.Time
 			}
 		}
+		fmt.Print("here2\n")
 
 		for k, v := range serviceCntPer10Sec {
+			// fmt.Printf("%s, %v, %v\n", k, v, summaryBy10Sec[subRecentTime][k])
+
 			if v.avg == 0 {
 				continue
 			}
-			if float64(summaryBy10Sec[recentTime][k]) > 5*v.avg {
+			if float64(summaryBy10Sec[subRecentTime][k]) > 5*v.avg {
+				// fmt.Printf("send alarm: found hack in service %s", k)
+
 				// Code for notification
 				feishu := notify.FeishuNotification{}
 
@@ -76,6 +85,7 @@ func (m *Monitor) Inspect(_ context.Context) (err error) {
 				// hard code email for demo
 				feishu.SendAlarm("yejunchen@pingcap.com", content)
 				feishu.SendAlarm("yuchao.li@pingcap.com", content)
+
 			}
 		}
 	}
