@@ -78,8 +78,13 @@ func (m *Monitor) Inspect(_ context.Context) (err error) {
 				// Code for notification
 				feishu := notify.FeishuNotification{}
 
+				block := notify.Block{
+					Text: fmt.Sprintf("捕获到服务 **%s** 非正常创建，近十秒内创建出 <font color='red'>%d</font> 实例，严重超出正常范围，请关注", k, summaryBy10Sec[subRecentTime][k]),
+				}
+
 				content := notify.NotifyContent{
-					Header: fmt.Sprintf("🛑 Found hack in service **%s**", k),
+					Header: fmt.Sprintf("🛑 Found hack in service %s", k),
+					Blocks: []notify.Block{block},
 				}
 
 				// hard code email for demo
