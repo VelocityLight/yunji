@@ -110,7 +110,7 @@ func MockHackerAttack(store *store.Store) {
 			UsedByTag:     detail.UsedByTag,
 		}
 
-		pkg.ProviderLogger.Printf("!!!Hacker accessing resource detail: %v; \n", realtimeEvent)
+		pkg.ProviderLogger.Printf("Accessing resource detail: %v; \n", realtimeEvent)
 		store.RealTime.Create(realtimeEvent)
 	}
 }

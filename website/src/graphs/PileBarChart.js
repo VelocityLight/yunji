@@ -56,15 +56,15 @@ const PileBarChart = ({ data = [], xfiled = "time", yfield = "cost", serie = "se
         };
       },
     },
-    // xAxis: {
-    //   label: {
-    //     autoRotate: false,
-    //   },
-    // },
-    // slider: {
-    //   start: 0,
-    //   end: 1,
-    // },
+    xAxis: {
+      label: {
+        autoRotate: false,
+      },
+    },
+    slider: {
+      start: 0,
+      end: 1,
+    },
     annotations,
   };
   return <Column {...config} />;
