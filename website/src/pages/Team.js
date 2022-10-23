@@ -50,24 +50,6 @@ const TeamPage = () => {
           defaultValue={[moment('20220801', dateFormat), moment('20220831', dateFormat)]}
           disabled={[false, false]}
         />
-        <Tag style={{
-          margin: '5px',
-        }}
-          color="cyan">Service</Tag>
-        <Select
-          defaultValue=""
-          style={{
-            width: "10%",
-          }}
-        >
-          <Option key="">-</Option>
-          <Option key="1">AmazonEC2</Option>
-          <Option key="2" >AmazonEKS</Option>
-          <Option key="3" >AmazonS3</Option>
-          <Option key="5" >AmazonVPC</Option>
-          <Option key="5" >AWSELB</Option>
-          <Option key="5" >AmazonRoute53</Option>
-        </Select>
 
         <Tag style={{
           margin: '5px',
