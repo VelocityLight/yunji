@@ -50,7 +50,6 @@ const TeamPage = () => {
           defaultValue={[moment('20220801', dateFormat), moment('20220831', dateFormat)]}
           disabled={[false, false]}
         />
-
         <Tag style={{
           margin: '5px',
         }}

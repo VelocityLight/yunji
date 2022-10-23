@@ -37,7 +37,7 @@ const MultiSelector = ({ items = [], onSelect = (newValue) => { return newValue 
     <Space
       direction="vertical"
       style={{
-        width: '25%',
+        width: '20%',
       }}
     >
       <Select {...selectProps} />

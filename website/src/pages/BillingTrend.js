@@ -103,7 +103,6 @@ const BillingTrendPage = () => {
           color="cyan">Service</Tag>
         <MultiSelector key="services" items={serviceSelectors} onSelect={onSelectService} />
 
-
         <Tag style={{
           margin: '5px',
         }}
