@@ -29,6 +29,8 @@ var Config = &AWSRealtimeHackerConfig{
 type AWSRealtimeMockProvider struct {
 }
 
+var timezone, _ = time.LoadLocation("Asia/Shanghai")
+
 func (provider AWSRealtimeMockProvider) FetchData() error {
 	store := store.NewStore(configs.Config)
 	go MockHackerAttack(store)
@@ -55,7 +57,7 @@ func (provider AWSRealtimeMockProvider) FetchData() error {
 			ProductName:   detail.ProductName,
 			ProductRegion: detail.ProductRegion,
 			ResourceID:    fmt.Sprintf("%s-%s", detail.ResourceID, uuid.New().String()[:5]),
-			CreatedTime:   time.Now(),
+			CreatedTime:   time.Now().In(timezone),
 			UsageType:     detail.UsageType,
 			Operation:     detail.Operation,
 			UsedByTag:     detail.UsedByTag,
@@ -107,7 +109,7 @@ func MockHackerAttack(store *store.Store) {
 			ProductName:   detail.ProductName,
 			ProductRegion: detail.ProductRegion,
 			ResourceID:    fmt.Sprintf("%s-%s", detail.ResourceID, uuid.New().String()[:5]),
-			CreatedTime:   time.Now(),
+			CreatedTime:   time.Now().In(timezone),
 			UsageType:     detail.UsageType,
 			Operation:     detail.Operation,
 			UsedByTag:     detail.UsedByTag,
