@@ -10,8 +10,8 @@ import (
 )
 
 type RealtimeHackerOps struct {
-	IsAttack       bool
-	AttackResource pkg.AWSResourceType
+	IsAttack       bool                `json:"is_attack,omitempty"`
+	AttackResource pkg.AWSResourceType `json:"attack_resource,omitempty"`
 }
 
 func (h *HTTPHandler) PostHackerTrigger(c *gin.Context) {

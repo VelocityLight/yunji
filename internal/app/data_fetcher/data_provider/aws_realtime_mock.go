@@ -31,9 +31,7 @@ type AWSRealtimeMockProvider struct {
 
 func (provider AWSRealtimeMockProvider) FetchData() error {
 	store := store.NewStore(configs.Config)
-	if Config.IsAttack {
-		go MockHackerAttack(store)
-	}
+	go MockHackerAttack(store)
 
 	originDetails, err := store.Billing.Select1000ForRealtime(context.Background())
 	if err != nil {
@@ -69,12 +67,26 @@ func (provider AWSRealtimeMockProvider) FetchData() error {
 }
 
 func MockHackerAttack(store *store.Store) {
+	resource := Config.AttackResource
 	originDetails, err := store.Billing.Select1000ByProductCode(context.Background(), string(Config.AttackResource))
 	if err != nil {
 		fmt.Print(err)
 	}
 
 	for {
+		if !Config.IsAttack {
+			tmp := rand.Intn(2000)
+			time.Sleep(time.Duration(tmp) * time.Millisecond)
+			continue
+		}
+
+		if resource != Config.AttackResource {
+			resource = Config.AttackResource
+			originDetails, err = store.Billing.Select1000ByProductCode(context.Background(), string(Config.AttackResource))
+			if err != nil {
+				fmt.Print(err)
+			}
+		}
 
 		// mock interval of operations
 		intervalSeed := rand.Intn(300)
