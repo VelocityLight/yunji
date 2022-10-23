@@ -8,7 +8,7 @@ import (
 type FeishuNotification struct {
 }
 
-func (notify FeishuNotification) SendAlarm(email string, content NotifyContent) error {
+func (notify *FeishuNotification) SendAlarm(email string, content NotifyContent) error {
 	token, err := feishu.GetAccessToken()
 	if err != nil {
 		return err
@@ -24,7 +24,7 @@ func (notify FeishuNotification) SendAlarm(email string, content NotifyContent) 
 	)
 }
 
-func (notify FeishuNotification) Parse2Alarm(content NotifyContent) feishu.MsgWrapper {
+func (notify *FeishuNotification) Parse2Alarm(content NotifyContent) feishu.MsgWrapper {
 	title := content.Header
 	mdcontent := ""
 	for _, block := range content.Blocks {

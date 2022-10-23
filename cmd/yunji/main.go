@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"os"
 	"os/signal"
@@ -11,6 +12,7 @@ import (
 	"yunji/api"
 	"yunji/configs"
 	"yunji/internal/app/data_fetcher"
+	"yunji/internal/service/monitor"
 	"yunji/utils/log"
 )
 
@@ -36,6 +38,8 @@ func main() {
 	}()
 
 	go data_fetcher.FetchData()
+	m := monitor.NewMonitor(configs.Config)
+	go m.Inspect(context.TODO())
 
 	if err := waitShutdown(h); err != nil {
 		log.Log.Errorf(err, "shutdown server error")
