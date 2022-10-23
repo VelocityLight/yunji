@@ -75,6 +75,7 @@ func (m *Monitor) Inspect(_ context.Context) (err error) {
 
 				// hard code email for demo
 				feishu.SendAlarm("yejunchen@pingcap.com", content)
+				feishu.SendAlarm("yuchao.li@pingcap.com", content)
 			}
 		}
 	}

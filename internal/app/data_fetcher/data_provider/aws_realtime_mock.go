@@ -92,7 +92,7 @@ func MockHackerAttack(store *store.Store) {
 		}
 
 		// mock interval of operations
-		intervalSeed := rand.Intn(300)
+		intervalSeed := rand.Intn(100)
 		time.Sleep(time.Duration(intervalSeed) * time.Millisecond)
 
 		// mock distribution of operations
