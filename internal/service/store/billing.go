@@ -81,21 +81,21 @@ limit 0, 1000
 func (s *BillingService) GetUsedByTags(ctx context.Context) ([]common.UsedByTag, error) {
 	var res []common.UsedByTag
 	err := s.db.SelectContext(ctx, &res, `
-		select resource_tags_user_usedby from dev_billing group by resource_tags_user_usedby`)
+		SELECT resource_tags_user_usedby FROM dev_billing GROUP BY resource_tags_user_usedby ORDER BY resource_tags_user_usedby ASC`)
 	return res, err
 }
 
 func (s *BillingService) GetTags(ctx context.Context) ([]common.Tag, error) {
 	var res []common.Tag
 	err := s.db.SelectContext(ctx, &res, `
-		select resource_tags_user_component from dev_billing group by resource_tags_user_component`)
+		SELECT resource_tags_user_component FROM dev_billing GROUP BY resource_tags_user_component ORDER BY resource_tags_user_component DESC`)
 	return res, err
 }
 
 func (s *BillingService) GetServices(ctx context.Context) ([]common.Service, error) {
 	var res []common.Service
 	err := s.db.SelectContext(ctx, &res, `
-		select line_item_product_code from dev_billing group by line_item_product_code`)
+		SELECT line_item_product_code FROM dev_billing GROUP BY line_item_product_code ORDER BY line_item_product_code ASC`)
 	return res, err
 }
 
@@ -120,6 +120,17 @@ func (s *BillingService) GetTrends(ctx context.Context, opts common.GetTrendOpts
 
 	log.Log.Infof("where: %v, query: %s, args: %v", where, query, args)
 	err := s.db.SelectContext(ctx, &res.Body, query, args...)
+
+	var dailyCost = make(map[string]float64)
+	for _, c := range res.Body {
+		dailyCost[c.Time] += c.Cost
+	}
+	for i := len(res.Body) - 1; i >= 0; i-- {
+		if res.Body[i].Cost < dailyCost[res.Body[i].Time]*0.02 {
+			res.Body = append(res.Body[:i], res.Body[i+1:]...)
+		}
+	}
+
 	return res, err
 }
 
