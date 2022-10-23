@@ -30,6 +30,16 @@ func (h *HTTPHandler) GetTags(c *gin.Context) {
 	resp, err := h.store.Billing.GetTags(c.Request.Context())
 	if err != nil {
 		c.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+	c.JSON(http.StatusOK, resp)
+}
+
+func (h *HTTPHandler) GetServices(c *gin.Context) {
+	resp, err := h.store.Billing.GetServices(c.Request.Context())
+	if err != nil {
+		c.AbortWithError(http.StatusInternalServerError, err)
+		return
 	}
 	c.JSON(http.StatusOK, resp)
 }
@@ -41,6 +51,7 @@ func (h *HTTPHandler) GetTrending(c *gin.Context) {
 		s, err := utils.ParseTime(c.Query("started_at"))
 		if err != nil {
 			c.AbortWithError(http.StatusInternalServerError, err)
+			return
 		}
 		StartedAt = &s
 	}
@@ -48,6 +59,7 @@ func (h *HTTPHandler) GetTrending(c *gin.Context) {
 		e, err := utils.ParseTime(c.Query("ended_at"))
 		if err != nil {
 			c.AbortWithError(http.StatusInternalServerError, err)
+			return
 		}
 		EndedAt = &e
 	}
@@ -55,12 +67,17 @@ func (h *HTTPHandler) GetTrending(c *gin.Context) {
 	tags, err := utils.ParseCSV(c.Query("tags"))
 	if err != nil {
 		c.AbortWithError(http.StatusInternalServerError, err)
+		return
 	}
 
 	svc, err := utils.ParseCSV(c.Query("service"))
 	if err != nil {
 		c.AbortWithError(http.StatusInternalServerError, err)
+		return
 	}
+	// if len(svc) == 0 {
+	// 	svc = append(svc, "AmazonS3")
+	// }
 
 	resp, err := h.store.Billing.GetTrends(c.Request.Context(), common.GetTrendOpts{
 		Tags:      tags,
@@ -70,6 +87,7 @@ func (h *HTTPHandler) GetTrending(c *gin.Context) {
 	})
 	if err != nil {
 		c.AbortWithError(http.StatusInternalServerError, err)
+		return
 	}
 	c.JSON(http.StatusOK, resp)
 }

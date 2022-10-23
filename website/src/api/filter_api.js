@@ -1,41 +1,25 @@
 import { url } from "./config"
 
-export async function fetchTags({ service }) {
-
-  var queryString = ""
-  if (service) {
-    queryString = service
-  }
-
-
+export async function fetchServices() {
   console.log(
-    "fetchTags",
-    url(`bills/used-by-tags?${queryString}`)
+    "fetchServices",
+    url(`bills/services`)
   );
 
-  return fetch(url(`bills/used-by-tags?${queryString}`))
+  return fetch(url(`bills/services`))
     .then(async (res) => {
       const data = await res.json();
       return data;
     })
 }
 
-export async function fetchServices({ tags = [] }) {
-  var queryString = ""
-  if (tags.length > 0) {
-    queryString = `
-    ${tags.map((item) => {
-      return "tags=" + item
-    }).join("&")
-      }`
-  }
-
+export async function fetchTags() {
   console.log(
-    "fetchService",
-    url(`bills/component-tags?${queryString}`)
+    "fetchTags",
+    url(`bills/component-tags`)
   );
 
-  return fetch(url(`bills/component-tags?${queryString}`))
+  return fetch(url(`bills/component-tags`))
     .then(async (res) => {
       const data = await res.json();
       return data;
