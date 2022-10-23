@@ -21,6 +21,8 @@ export function getSelectorValues(tagResp) {
   return tagResp.map(tag => tag.name)
 }
 
+var showData = [];
+
 const BillingTrendPage = () => {
   const [selectedTags, setSelectedTags] = useState([])
   const [selectedService, setSelectedService] = useState([])
@@ -33,17 +35,16 @@ const BillingTrendPage = () => {
   }
 
   const tagQuery = useQuery(
-    ["billingTrendTags", selectedTags],
+    ["billingTrendTags"],
     () => fetchTags(),
     {
       keepPreviousData: true,
       staleTime: 50,
     }
-
   )
 
   const serviceQuery = useQuery(
-    ["billingTrendService", selectedService],
+    ["billingTrendService"],
     () => fetchServices(),
     {
       keepPreviousData: true,
@@ -53,9 +54,12 @@ const BillingTrendPage = () => {
   )
 
   useEffect(() => {
-    fetchBillingByTagAndService({ tags: selectedTags, service: selectedService })
-      .then((resp) => setInputData(resp.body == undefined ? [] : resp.body));
-  }, [selectedTags, selectedService]);
+    fetchBillingByTagAndService({ tags: selectedTags })
+      .then((resp) => {
+        var tmp = resp.body == undefined ? [] : resp.body
+        setInputData(tmp)
+      });
+  }, [selectedTags]);
 
 
   if (tagQuery.isLoading || serviceQuery.isLoading) {
@@ -67,8 +71,15 @@ const BillingTrendPage = () => {
 
   const tagSelectors = getSelectorValues(tagQuery.data)
   const serviceSelectors = getSelectorValues(serviceQuery.data)
-  // setInputData(query.data.body == undefined ? [] : query.data.body)
-  // // const inputData = query.data.body == undefined ? [] : query.data.body
+
+  showData = inputData
+  if (selectedService.length > 0) {
+    showData = inputData.filter(item => {
+      return selectedService.includes(item.service)
+    })
+  }
+
+
   const dateFormat = 'YYYYMMDD';
   return (
     <MyLayout>
@@ -110,7 +121,7 @@ const BillingTrendPage = () => {
         </Select>
       </div>
       <div>
-        <PileBarChart data={inputData} />
+        <PileBarChart data={showData} />
       </div>
     </MyLayout >
   );
