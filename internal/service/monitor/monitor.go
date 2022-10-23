@@ -66,7 +66,15 @@ func (m *Monitor) Inspect(_ context.Context) (err error) {
 				continue
 			}
 			if float64(summaryBy10Sec[recentTime][k]) > 5*v.avg {
-				fmt.Printf("send alarm: found hack in service %s", k)
+				// Code for notification
+				feishu := notify.FeishuNotification{}
+
+				content := notify.NotifyContent{
+					Header: fmt.Sprintf("🛑 Found hack in service **%s**", k),
+				}
+
+				// hard code email for demo
+				feishu.SendAlarm("yejunchen@pingcap.com", content)
 			}
 		}
 	}
