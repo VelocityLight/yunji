@@ -31,10 +31,18 @@ func (s *RealTimeService) GetRealTime(ctx context.Context) (common.GetRealTimeRe
 	var res common.GetRealTimeResponse
 	err := s.db.SelectContext(ctx, &res.Body, `
 		SELECT 
-			DATE_FORMAT(created_time,'%Y%m%d-%H:%i') AS time,
+			DATE_FORMAT(
+				concat( 
+					date( created_time ), ' ', 
+					HOUR ( created_time ), ':', 
+					MINUTE(created_time), ':', 
+					floor( SECOND ( created_time ) / 10 ) * 10 
+				),
+				'%Y-%m-%d %H:%i:%S'
+			) AS time,
 			count(created_time) AS cnt,
 			product_code AS service 
-		FROM realtime_event WHERE created_time > DATE_ADD(NOW(),INTERVAL 430 MINUTE)
+		FROM realtime_event WHERE created_time > DATE_ADD(NOW(),INTERVAL 470 MINUTE)
 		GROUP BY time,service
 		ORDER BY time`)
 	return res, err
