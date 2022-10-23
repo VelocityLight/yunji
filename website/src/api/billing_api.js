@@ -3,16 +3,12 @@ import { url } from "./config"
 export async function fetchBillingByTagAndService({ tags = [], service }) {
   var tagQuery = ""
   if (tags.length > 0) {
-    tagQuery = `
-    ${tags.map((item) => {
-      return "tags=" + item
-    }).join("&")
-      }`
+    tagQuery = `tags=`.concat(tags.join(","))
   }
 
   var serviceQuery = ""
   if (service && service.length > 0) {
-    serviceQuery = "service=" + service
+    serviceQuery = `service=`.concat(service.join(","))
   }
 
   var queryString = tagQuery
@@ -21,14 +17,14 @@ export async function fetchBillingByTagAndService({ tags = [], service }) {
   }
 
   console.log(
-    "fetchBiling",
+    "fetchBilling",
     url(`bills/trend?${queryString}`)
   );
 
   return fetch(url(`bills/trend?${queryString}`))
     .then(async (res) => {
       const data = await res.json();
-      return data.data;
+      return data;
     })
   // .catch((e) => {
   //   return e

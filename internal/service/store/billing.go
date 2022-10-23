@@ -92,6 +92,13 @@ func (s *BillingService) GetTags(ctx context.Context) ([]common.Tag, error) {
 	return res, err
 }
 
+func (s *BillingService) GetServices(ctx context.Context) ([]common.Service, error) {
+	var res []common.Service
+	err := s.db.SelectContext(ctx, &res, `
+		select line_item_product_code from dev_billing group by line_item_product_code`)
+	return res, err
+}
+
 func (s *BillingService) GetTrends(ctx context.Context, opts common.GetTrendOpts) (common.GetTrendResponse, error) {
 	var res common.GetTrendResponse
 	where := []exp.Expression{}
@@ -100,7 +107,7 @@ func (s *BillingService) GetTrends(ctx context.Context, opts common.GetTrendOpts
 	}
 
 	if len(opts.Service) > 0 {
-		where = append(where, goqu.I("dev_billing.resource_tags_user_usedby").In(opts.Service))
+		where = append(where, goqu.I("dev_billing.line_item_product_code").In(opts.Service))
 	}
 
 	b := sql.Builder.From(goqu.T("dev_billing")).Where(where...).Prepared(true)
