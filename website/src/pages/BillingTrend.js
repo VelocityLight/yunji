@@ -23,7 +23,7 @@ const BillingTrendPage = () => {
   }
 
   const tagQuery = useQuery(
-    ["billingTrend", selectedTags],
+    ["billingTrendTags"],
     () => fetchTags(),
     {
       keepPreviousData: true,
@@ -32,7 +32,7 @@ const BillingTrendPage = () => {
   )
 
   const serviceQuery = useQuery(
-    ["billingTrend", selectedService],
+    ["billingTrendService"],
     () => fetchServices(),
     {
       keepPreviousData: true,
