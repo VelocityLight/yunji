@@ -1,6 +1,7 @@
 package notify
 
 import (
+	"fmt"
 	"testing"
 	"yunji/configs"
 	"yunji/internal/pkg/feishu"
@@ -11,20 +12,8 @@ func TestFeishuNotify(t *testing.T) {
 	config := configs.Config
 	feishu.SetFeishuApp(config.Feishu.AppId, config.Feishu.AppSecret)
 
-	links := []Link{
-		{
-			"https://www.baidu.com",
-			"百度",
-		},
-		{
-			"https://www.google.com",
-			"Google",
-		},
-	}
-
 	block := Block{
-		"这是一条**支持**<font color='red'>Markdown</font>的测试告警",
-		links,
+		Text: "这是一条**支持**<font color='red'>Markdown</font>的测试告警",
 	}
 
 	content := NotifyContent{
@@ -33,5 +22,24 @@ func TestFeishuNotify(t *testing.T) {
 	}
 
 	notify := FeishuNotification{}
-	notify.SendAlarm("yuchao.li@pingcap.com", content)
+	notify.SendAlarm("xxxxxxxxxxxxxxxxxxxxx", content)
+
+}
+
+func TestFeishuNotify1(t *testing.T) {
+	configs.LoadConfig("../../../../config.yaml")
+	config := configs.Config
+	feishu.SetFeishuApp(config.Feishu.AppId, config.Feishu.AppSecret)
+
+	// Code for notification
+	feishu := FeishuNotification{}
+
+	content := NotifyContent{
+		Header: fmt.Sprintf("🛑 Found hack in service **%s**", "xxx"),
+	}
+
+	// hard code email for demo
+	feishu.SendAlarm("xxx", content)
+	feishu.SendAlarm("xxx", content)
+
 }

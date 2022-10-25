@@ -13,7 +13,7 @@ func TestSendPostMsgCard(t *testing.T) {
 	token, _ := GetAccessTokenFromApp(config.Feishu.AppId, config.Feishu.AppSecret)
 	receiver := MsgReceiver{
 		IDType: MsgIDTypeEmail,
-		ID:     "yuchao.li@pingcap.com",
+		ID:     "xxx",
 	}
 
 	SendMsgCard(receiver,

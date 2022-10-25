@@ -12,6 +12,7 @@ type NotifyContent struct {
 
 type Block struct {
 	Text  string
+
 	Links []Link
 }
 
